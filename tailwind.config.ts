@@ -63,11 +63,18 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				rarity: {
-					common: '#9CA3AF',
+					common: '#6B7280',
 					rare: '#3B82F6',
-					epic: '#8B5CF6',
-					legendary: '#F59E0B',
-					mythic: '#EF4444'
+					epic: '#A855F7',
+					legendary: '#FBBF24',
+					mythic: '#F43F5E'
+				},
+				ggdrop: {
+					green: '#1DB954',
+					'green-dark': '#169145',
+					dark: '#0F1419',
+					'dark-lighter': '#16181D',
+					yellow: '#FFD700'
 				}
 			},
 			borderRadius: {

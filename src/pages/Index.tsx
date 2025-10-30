@@ -288,60 +288,60 @@ const Index = () => {
       </div>
       
       <div className="relative z-10">
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b border-primary/20 bg-[#0F1419]/98 backdrop-blur">
         <div className="container flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <div className="text-3xl">📦</div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              BoosterBox.gg
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center font-bold text-xl">G</div>
+            <h1 className="text-2xl font-bold text-white">
+              GG<span className="text-primary">DROP</span>
             </h1>
           </div>
           
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-1">
             <button
               onClick={() => setActiveTab('cases')}
-              className={`font-medium transition-colors hover:text-primary ${
-                activeTab === 'cases' ? 'text-primary' : 'text-muted-foreground'
+              className={`font-semibold px-4 py-2 rounded-lg transition-all ${
+                activeTab === 'cases' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-white hover:bg-card/50'
               }`}
             >
               Кейсы
             </button>
             <button
               onClick={() => setActiveTab('inventory')}
-              className={`font-medium transition-colors hover:text-primary ${
-                activeTab === 'inventory' ? 'text-primary' : 'text-muted-foreground'
+              className={`font-semibold px-4 py-2 rounded-lg transition-all ${
+                activeTab === 'inventory' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-white hover:bg-card/50'
               }`}
             >
               Инвентарь
             </button>
             <button
               onClick={() => setActiveTab('history')}
-              className={`font-medium transition-colors hover:text-primary ${
-                activeTab === 'history' ? 'text-primary' : 'text-muted-foreground'
+              className={`font-semibold px-4 py-2 rounded-lg transition-all ${
+                activeTab === 'history' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-white hover:bg-card/50'
               }`}
             >
               История
             </button>
             <button
               onClick={() => setActiveTab('leaderboard')}
-              className={`font-medium transition-colors hover:text-primary ${
-                activeTab === 'leaderboard' ? 'text-primary' : 'text-muted-foreground'
+              className={`font-semibold px-4 py-2 rounded-lg transition-all ${
+                activeTab === 'leaderboard' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-white hover:bg-card/50'
               }`}
             >
               Топ игроков
             </button>
             <button
               onClick={() => setActiveTab('upgrade')}
-              className={`font-medium transition-colors hover:text-primary ${
-                activeTab === 'upgrade' ? 'text-primary' : 'text-muted-foreground'
+              className={`font-semibold px-4 py-2 rounded-lg transition-all ${
+                activeTab === 'upgrade' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-white hover:bg-card/50'
               }`}
             >
               Апгрейд
             </button>
             <button
               onClick={() => setActiveTab('faq')}
-              className={`font-medium transition-colors hover:text-primary ${
-                activeTab === 'faq' ? 'text-primary' : 'text-muted-foreground'
+              className={`font-semibold px-4 py-2 rounded-lg transition-all ${
+                activeTab === 'faq' ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-white hover:bg-card/50'
               }`}
             >
               FAQ
@@ -349,18 +349,16 @@ const Index = () => {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Card className="px-4 py-2 bg-card/50 border-primary/20">
-              <div className="flex items-center gap-2">
-                <Icon name="Coins" className="text-secondary" size={20} />
-                <span className="font-bold text-lg">{balance.toFixed(0)}</span>
-              </div>
-            </Card>
-            <Button size="sm" variant="outline" onClick={() => setShowDepositDialog(true)}>
+            <div className="flex items-center gap-2 px-4 py-2 bg-card rounded-lg border border-primary/30">
+              <Icon name="Coins" size={20} className="text-secondary" />
+              <span className="font-bold text-white">{balance.toFixed(0)}</span>
+            </div>
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-white font-semibold" onClick={() => setShowDepositDialog(true)}>
               <Icon name="Plus" size={16} className="mr-1" />
               Пополнить
             </Button>
-            <Button size="sm" variant="outline" onClick={() => setShowWithdrawDialog(true)}>
-              <Icon name="ArrowDownToLine" size={16} className="mr-1" />
+            <Button size="sm" className="bg-secondary hover:bg-secondary/90 text-black font-semibold" onClick={() => setShowWithdrawDialog(true)}>
+              <Icon name="ArrowUpRight" size={16} className="mr-1" />
               Вывести
             </Button>
             <Button size="icon" variant="ghost" onClick={() => setActiveTab('profile')}>
@@ -388,35 +386,35 @@ const Index = () => {
               {cases.map((caseItem) => (
                 <Card
                   key={caseItem.id}
-                  className={`group relative overflow-hidden border-2 transition-all duration-300 hover:scale-105 ${
+                  className={`group relative overflow-hidden border-2 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 ${
                     rarityColors[caseItem.rarity]
-                  } hover:shadow-2xl cursor-pointer`}
+                  } hover:shadow-[0_0_30px_rgba(29,185,84,0.3)] cursor-pointer bg-card/80 backdrop-blur`}
                   onClick={() => openCase(caseItem)}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/20" />
-                  <div className="relative p-6 space-y-4">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-black/40" />
+                  <div className="relative p-5 space-y-3">
                     <div className="flex justify-between items-start">
-                      <Badge variant="outline" className={rarityColors[caseItem.rarity]}>
+                      <Badge variant="outline" className={`${rarityColors[caseItem.rarity]} font-semibold`}>
                         {rarityLabels[caseItem.rarity]}
                       </Badge>
                     </div>
                     
-                    <div className="flex justify-center my-4">
+                    <div className="flex justify-center my-3">
                       <img 
                         src={caseItem.image} 
                         alt={caseItem.name}
-                        className="w-full h-48 object-contain animate-bounce-subtle"
+                        className="w-full h-44 object-contain group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                     
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-bold">{caseItem.name}</h3>
+                    <div className="space-y-3">
+                      <h3 className="text-lg font-bold text-white">{caseItem.name}</h3>
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-2xl font-bold text-secondary">
-                          <Icon name="Coins" size={24} />
+                        <div className="flex items-center gap-2 text-xl font-bold text-secondary">
+                          <Icon name="Coins" size={22} />
                           {caseItem.price}
                         </div>
-                        <Button size="sm" className="group-hover:bg-primary group-hover:text-primary-foreground">
+                        <Button size="sm" className="bg-primary hover:bg-primary/90 text-white font-semibold">
                           Открыть
                           <Icon name="ChevronRight" size={16} className="ml-1" />
                         </Button>
