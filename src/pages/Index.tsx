@@ -107,6 +107,10 @@ const Index = () => {
       return;
     }
 
+    const openSound = new Audio('https://cdn.freesound.org/previews/320/320655_5260872-lq.mp3');
+    openSound.volume = 0.3;
+    openSound.play();
+
     setSelectedCase(caseItem);
     setIsOpeningCase(true);
     setBalance(balance - caseItem.price);
@@ -115,6 +119,10 @@ const Index = () => {
       const rarities: Rarity[] = ['common', 'rare', 'epic', 'legendary', 'mythic'];
       const randomRarity = rarities[Math.floor(Math.random() * rarities.length)];
       const itemValue = Math.floor(Math.random() * 500) + 100;
+      
+      const winSound = new Audio('https://cdn.freesound.org/previews/171/171671_2437358-lq.mp3');
+      winSound.volume = 0.4;
+      winSound.play();
       
       const newItem: InventoryItem = {
         id: Date.now(),
@@ -180,6 +188,10 @@ const Index = () => {
       return;
     }
 
+    const upgradeSound = new Audio('https://cdn.freesound.org/previews/341/341695_5121236-lq.mp3');
+    upgradeSound.volume = 0.3;
+    upgradeSound.play();
+
     setIsUpgrading(true);
 
     setTimeout(() => {
@@ -188,6 +200,10 @@ const Index = () => {
       const success = Math.random() < successChance;
 
       if (success) {
+        const successSound = new Audio('https://cdn.freesound.org/previews/270/270404_5123851-lq.mp3');
+        successSound.volume = 0.5;
+        successSound.play();
+
         const rarities: Rarity[] = ['common', 'rare', 'epic', 'legendary', 'mythic'];
         const maxRarityIndex = Math.max(...selectedUpgradeItems.map(item => 
           rarities.indexOf(item.rarity)
@@ -208,6 +224,10 @@ const Index = () => {
         setInventory([newItem, ...newInventory]);
         setUpgradeResult({ success: true, item: newItem });
       } else {
+        const failSound = new Audio('https://cdn.freesound.org/previews/142/142608_2615119-lq.mp3');
+        failSound.volume = 0.4;
+        failSound.play();
+
         const newInventory = inventory.filter(item => 
           !selectedUpgradeItems.find(selected => selected.id === item.id)
         );
