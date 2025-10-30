@@ -27,6 +27,7 @@ interface InventoryItem {
   name: string;
   rarity: Rarity;
   value: number;
+  image?: string;
 }
 
 interface HistoryItem {
@@ -77,9 +78,9 @@ const Index = () => {
   const [rouletteItems, setRouletteItems] = useState<InventoryItem[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [inventory, setInventory] = useState<InventoryItem[]>([
-    { id: 1, name: 'AK-47 | Redline', rarity: 'legendary', value: 450 },
-    { id: 2, name: 'AWP | Asiimov', rarity: 'mythic', value: 800 },
-    { id: 3, name: 'M4A4 | Howl', rarity: 'epic', value: 350 },
+    { id: 1, name: 'AK-47 | Redline', rarity: 'legendary', value: 450, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1817158d-6714-4f64-a134-cd7d32544c61.jpg' },
+    { id: 2, name: 'AWP | Asiimov', rarity: 'mythic', value: 800, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1d686c74-dadf-4e53-8ce5-0cec8f9ad441.jpg' },
+    { id: 3, name: 'M4A4 | Howl', rarity: 'epic', value: 350, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/c3991274-3346-486a-a173-2a3356611dd4.jpg' },
   ]);
   const [history, setHistory] = useState<HistoryItem[]>([
     { id: 1, caseName: 'Золотой кейс', itemName: 'AK-47 | Redline', rarity: 'legendary', timestamp: '2 мин назад' },
@@ -119,32 +120,37 @@ const Index = () => {
     setBalance(balance - caseItem.price);
 
     const rarities: Rarity[] = ['common', 'rare', 'epic', 'legendary', 'mythic'];
-    const skinNames = [
-      'AK-47 | Redline', 'AWP | Asiimov', 'M4A4 | Howl', 'Desert Eagle | Blaze',
-      'Glock-18 | Fade', 'USP-S | Kill Confirmed', 'P90 | Asiimov', 'MAC-10 | Neon Rider',
-      'MP7 | Fade', 'AUG | Chameleon', 'SG 553 | Integrale', 'FAMAS | Mecha Industries'
+    const skins = [
+      { name: 'AK-47 | Redline', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1817158d-6714-4f64-a134-cd7d32544c61.jpg' },
+      { name: 'AWP | Asiimov', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1d686c74-dadf-4e53-8ce5-0cec8f9ad441.jpg' },
+      { name: 'M4A4 | Howl', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/c3991274-3346-486a-a173-2a3356611dd4.jpg' },
+      { name: 'Desert Eagle | Blaze', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/f98bc3ea-e274-4290-93a4-4df9fa84b2cc.jpg' },
+      { name: 'Glock-18 | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/6a1a3c7a-7c64-4b6c-b12f-0b5531f6215a.jpg' },
+      { name: 'USP-S | Kill Confirmed', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/3a7a2486-34ec-4f61-9da4-911b58ee5ed0.jpg' },
     ];
     
     const generatedItems: InventoryItem[] = [];
     for (let i = 0; i < 50; i++) {
       const randomRarity = rarities[Math.floor(Math.random() * rarities.length)];
-      const randomName = skinNames[Math.floor(Math.random() * skinNames.length)];
+      const randomSkin = skins[Math.floor(Math.random() * skins.length)];
       generatedItems.push({
         id: Date.now() + i,
-        name: randomName,
+        name: randomSkin.name,
         rarity: randomRarity,
         value: Math.floor(Math.random() * 500) + 100,
+        image: randomSkin.image,
       });
     }
     
     const winningIndex = 45;
     const randomRarity = rarities[Math.floor(Math.random() * rarities.length)];
-    const randomName = skinNames[Math.floor(Math.random() * skinNames.length)];
+    const randomSkin = skins[Math.floor(Math.random() * skins.length)];
     const winningItem: InventoryItem = {
       id: Date.now() + 999,
-      name: randomName,
+      name: randomSkin.name,
       rarity: randomRarity,
       value: Math.floor(Math.random() * 500) + 100,
+      image: randomSkin.image,
     };
     generatedItems[winningIndex] = winningItem;
     
@@ -440,9 +446,15 @@ const Index = () => {
                       <Badge variant="outline" className={rarityColors[item.rarity]}>
                         {rarityLabels[item.rarity]}
                       </Badge>
-                      <div className="text-2xl">🔫</div>
                     </div>
-                    <h3 className="font-bold">{item.name}</h3>
+                    <div className="flex justify-center my-2">
+                      <img 
+                        src={item.image} 
+                        alt={item.name}
+                        className="w-24 h-24 object-contain"
+                      />
+                    </div>
+                    <h3 className="font-bold text-sm">{item.name}</h3>
                     <div className="flex items-center gap-2 text-secondary font-bold">
                       <Icon name="Coins" size={18} />
                       {item.value}
@@ -720,9 +732,13 @@ const Index = () => {
                   {rouletteItems.map((item, index) => (
                     <div 
                       key={index}
-                      className={`flex-shrink-0 w-[150px] h-[180px] border-2 rounded-lg p-4 flex flex-col items-center justify-center gap-2 ${rarityColors[item.rarity]}`}
+                      className={`flex-shrink-0 w-[150px] h-[180px] border-2 rounded-lg p-3 flex flex-col items-center justify-center gap-2 ${rarityColors[item.rarity]}`}
                     >
-                      <div className="text-4xl">🔫</div>
+                      <img 
+                        src={item.image} 
+                        alt={item.name}
+                        className="w-20 h-20 object-contain"
+                      />
                       <div className="text-xs text-center font-medium line-clamp-2">{item.name}</div>
                       <Badge className={`${rarityColors[item.rarity]} text-xs`}>
                         {rarityLabels[item.rarity]}
@@ -733,7 +749,11 @@ const Index = () => {
               </div>
             ) : (
               <>
-                <div className="text-6xl animate-bounce-subtle">🔫</div>
+                <img 
+                  src={wonItem.image} 
+                  alt={wonItem.name}
+                  className="w-48 h-48 object-contain animate-bounce-subtle"
+                />
                 <div className="text-center space-y-2">
                   <div className="text-xl font-bold">{wonItem.name}</div>
                   <Badge className={`${rarityColors[wonItem.rarity]} text-lg px-4 py-1`}>
