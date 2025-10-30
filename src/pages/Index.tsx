@@ -74,6 +74,8 @@ const Index = () => {
   const [isOpeningCase, setIsOpeningCase] = useState(false);
   const [selectedCase, setSelectedCase] = useState<CaseItem | null>(null);
   const [wonItem, setWonItem] = useState<InventoryItem | null>(null);
+  const [rouletteItems, setRouletteItems] = useState<InventoryItem[]>([]);
+  const [isSpinning, setIsSpinning] = useState(false);
   const [inventory, setInventory] = useState<InventoryItem[]>([
     { id: 1, name: 'AK-47 | Redline', rarity: 'legendary', value: 450 },
     { id: 2, name: 'AWP | Asiimov', rarity: 'mythic', value: 800 },
@@ -113,38 +115,62 @@ const Index = () => {
 
     setSelectedCase(caseItem);
     setIsOpeningCase(true);
+    setWonItem(null);
     setBalance(balance - caseItem.price);
 
-    setTimeout(() => {
-      const rarities: Rarity[] = ['common', 'rare', 'epic', 'legendary', 'mythic'];
+    const rarities: Rarity[] = ['common', 'rare', 'epic', 'legendary', 'mythic'];
+    const skinNames = [
+      'AK-47 | Redline', 'AWP | Asiimov', 'M4A4 | Howl', 'Desert Eagle | Blaze',
+      'Glock-18 | Fade', 'USP-S | Kill Confirmed', 'P90 | Asiimov', 'MAC-10 | Neon Rider',
+      'MP7 | Fade', 'AUG | Chameleon', 'SG 553 | Integrale', 'FAMAS | Mecha Industries'
+    ];
+    
+    const generatedItems: InventoryItem[] = [];
+    for (let i = 0; i < 50; i++) {
       const randomRarity = rarities[Math.floor(Math.random() * rarities.length)];
-      const itemValue = Math.floor(Math.random() * 500) + 100;
+      const randomName = skinNames[Math.floor(Math.random() * skinNames.length)];
+      generatedItems.push({
+        id: Date.now() + i,
+        name: randomName,
+        rarity: randomRarity,
+        value: Math.floor(Math.random() * 500) + 100,
+      });
+    }
+    
+    const winningIndex = 45;
+    const randomRarity = rarities[Math.floor(Math.random() * rarities.length)];
+    const randomName = skinNames[Math.floor(Math.random() * skinNames.length)];
+    const winningItem: InventoryItem = {
+      id: Date.now() + 999,
+      name: randomName,
+      rarity: randomRarity,
+      value: Math.floor(Math.random() * 500) + 100,
+    };
+    generatedItems[winningIndex] = winningItem;
+    
+    setRouletteItems(generatedItems);
+    setIsSpinning(true);
+
+    setTimeout(() => {
+      setIsSpinning(false);
       
       const winSound = new Audio('https://cdn.freesound.org/previews/171/171671_2437358-lq.mp3');
       winSound.volume = 0.4;
       winSound.play();
       
-      const newItem: InventoryItem = {
-        id: Date.now(),
-        name: `Скин ${caseItem.name}`,
-        rarity: randomRarity,
-        value: itemValue,
-      };
-
-      setWonItem(newItem);
-      setInventory([newItem, ...inventory]);
+      setWonItem(winningItem);
+      setInventory([winningItem, ...inventory]);
       setHistory([
         {
           id: Date.now(),
           caseName: caseItem.name,
-          itemName: newItem.name,
-          rarity: randomRarity,
+          itemName: winningItem.name,
+          rarity: winningItem.rarity,
           timestamp: 'только что',
         },
         ...history,
       ]);
-      setIsOpeningCase(false);
-    }, 3000);
+    }, 5000);
   };
 
   const handleDeposit = () => {
@@ -671,28 +697,40 @@ const Index = () => {
       </main>
 
       <Dialog open={isOpeningCase} onOpenChange={setIsOpeningCase}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-4xl max-w-[90vw]">
           <DialogHeader>
             <DialogTitle className="text-2xl text-center">
               {wonItem ? '🎉 Поздравляем!' : 'Открываем кейс...'}
             </DialogTitle>
             <DialogDescription className="text-center">
-              {wonItem ? 'Вы выиграли:' : 'Ожидайте результат'}
+              {wonItem ? 'Вы выиграли:' : 'Следите за рулеткой'}
             </DialogDescription>
           </DialogHeader>
           
-          <div className="flex flex-col items-center justify-center p-8 space-y-4">
+          <div className="flex flex-col items-center justify-center space-y-4">
             {!wonItem ? (
-              <>
-                <img 
-                  src={selectedCase?.image} 
-                  alt="Opening case"
-                  className="w-48 h-48 object-contain animate-spin-slow"
-                />
-                <div className="text-lg font-medium animate-pulse">
-                  Вращаем барабан...
+              <div className="w-full overflow-hidden relative" style={{ height: '200px' }}>
+                <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-primary z-10" style={{ transform: 'translateX(-50%)' }}></div>
+                <div className="absolute left-1/2 top-0 w-0 h-0 border-l-8 border-r-8 border-t-8 border-transparent border-t-primary z-10" style={{ transform: 'translateX(-50%)' }}></div>
+                
+                <div 
+                  className={`flex gap-2 py-4 ${isSpinning ? 'roulette-spinning' : ''}`}
+                  style={{ paddingLeft: 'calc(50% - 75px)' }}
+                >
+                  {rouletteItems.map((item, index) => (
+                    <div 
+                      key={index}
+                      className={`flex-shrink-0 w-[150px] h-[180px] border-2 rounded-lg p-4 flex flex-col items-center justify-center gap-2 ${rarityColors[item.rarity]}`}
+                    >
+                      <div className="text-4xl">🔫</div>
+                      <div className="text-xs text-center font-medium line-clamp-2">{item.name}</div>
+                      <Badge className={`${rarityColors[item.rarity]} text-xs`}>
+                        {rarityLabels[item.rarity]}
+                      </Badge>
+                    </div>
+                  ))}
                 </div>
-              </>
+              </div>
             ) : (
               <>
                 <div className="text-6xl animate-bounce-subtle">🔫</div>

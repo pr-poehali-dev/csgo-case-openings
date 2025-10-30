@@ -70,4 +70,17 @@
   .glow-red {
     box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
   }
+
+  @keyframes roulette-spin {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-4500px);
+    }
+  }
+
+  .roulette-spinning {
+    animation: roulette-spin 5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+  }
 }
