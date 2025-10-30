@@ -78,14 +78,14 @@ const Index = () => {
   const [rouletteItems, setRouletteItems] = useState<InventoryItem[]>([]);
   const [isSpinning, setIsSpinning] = useState(false);
   const [inventory, setInventory] = useState<InventoryItem[]>([
-    { id: 1, name: 'AK-47 | Redline', rarity: 'legendary', value: 450, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1817158d-6714-4f64-a134-cd7d32544c61.jpg' },
-    { id: 2, name: 'AWP | Asiimov', rarity: 'mythic', value: 800, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1d686c74-dadf-4e53-8ce5-0cec8f9ad441.jpg' },
-    { id: 3, name: 'M4A4 | Howl', rarity: 'epic', value: 350, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/c3991274-3346-486a-a173-2a3356611dd4.jpg' },
+    { id: 1, name: '★ Karambit | Fade', rarity: 'mythic', value: 3500, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/d4718631-280d-4f03-8c40-bb62744abc7a.jpg' },
+    { id: 2, name: 'AK-47 | Redline', rarity: 'legendary', value: 1200, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1817158d-6714-4f64-a134-cd7d32544c61.jpg' },
+    { id: 3, name: 'AWP | Asiimov', rarity: 'legendary', value: 980, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1d686c74-dadf-4e53-8ce5-0cec8f9ad441.jpg' },
   ]);
   const [history, setHistory] = useState<HistoryItem[]>([
-    { id: 1, caseName: 'Золотой кейс', itemName: 'AK-47 | Redline', rarity: 'legendary', timestamp: '2 мин назад' },
-    { id: 2, caseName: 'Мифический кейс', itemName: 'AWP | Asiimov', rarity: 'mythic', timestamp: '15 мин назад' },
-    { id: 3, caseName: 'Легендарный кейс', itemName: 'M4A4 | Howl', rarity: 'epic', timestamp: '1 час назад' },
+    { id: 1, caseName: 'Королевский кейс', itemName: '★ Karambit | Fade', rarity: 'mythic', timestamp: '2 мин назад' },
+    { id: 2, caseName: 'Золотой кейс', itemName: 'AK-47 | Redline', rarity: 'legendary', timestamp: '15 мин назад' },
+    { id: 3, caseName: 'Легендарный кейс', itemName: 'AWP | Asiimov', rarity: 'legendary', timestamp: '1 час назад' },
   ]);
   const [leaderboard] = useState<LeaderboardPlayer[]>([
     { id: 1, username: 'ProGamer2024', totalWon: 15420, casesOpened: 342 },
@@ -121,35 +121,51 @@ const Index = () => {
 
     const rarities: Rarity[] = ['common', 'rare', 'epic', 'legendary', 'mythic'];
     const skins = [
-      { name: 'AK-47 | Redline', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1817158d-6714-4f64-a134-cd7d32544c61.jpg' },
-      { name: 'AWP | Asiimov', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1d686c74-dadf-4e53-8ce5-0cec8f9ad441.jpg' },
-      { name: 'M4A4 | Howl', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/c3991274-3346-486a-a173-2a3356611dd4.jpg' },
-      { name: 'Desert Eagle | Blaze', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/f98bc3ea-e274-4290-93a4-4df9fa84b2cc.jpg' },
-      { name: 'Glock-18 | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/6a1a3c7a-7c64-4b6c-b12f-0b5531f6215a.jpg' },
-      { name: 'USP-S | Kill Confirmed', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/3a7a2486-34ec-4f61-9da4-911b58ee5ed0.jpg' },
+      { name: '★ Karambit | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/d4718631-280d-4f03-8c40-bb62744abc7a.jpg', rarity: 'mythic' as Rarity },
+      { name: '★ Butterfly Knife | Doppler', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/ba1f5ac6-968f-4af9-8e1f-9b2896613848.jpg', rarity: 'mythic' as Rarity },
+      { name: '★ M9 Bayonet | Crimson Web', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/e0d60ad9-b2a2-466b-aa0a-01bb42695b91.jpg', rarity: 'legendary' as Rarity },
+      { name: 'AK-47 | Redline', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1817158d-6714-4f64-a134-cd7d32544c61.jpg', rarity: 'legendary' as Rarity },
+      { name: 'AWP | Asiimov', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1d686c74-dadf-4e53-8ce5-0cec8f9ad441.jpg', rarity: 'legendary' as Rarity },
+      { name: 'M4A4 | Howl', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/c3991274-3346-486a-a173-2a3356611dd4.jpg', rarity: 'epic' as Rarity },
+      { name: 'Desert Eagle | Blaze', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/f98bc3ea-e274-4290-93a4-4df9fa84b2cc.jpg', rarity: 'epic' as Rarity },
+      { name: 'Glock-18 | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/6a1a3c7a-7c64-4b6c-b12f-0b5531f6215a.jpg', rarity: 'rare' as Rarity },
+      { name: 'USP-S | Kill Confirmed', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/3a7a2486-34ec-4f61-9da4-911b58ee5ed0.jpg', rarity: 'rare' as Rarity },
+      { name: 'P250 | Asiimov', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/bc57f5b7-9aee-4b11-8f38-a2ab0062906f.jpg', rarity: 'rare' as Rarity },
+      { name: 'MAC-10 | Neon Rider', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/e5354089-2758-4cb2-a372-8dc6cbb78378.jpg', rarity: 'common' as Rarity },
+      { name: 'AUG | Chameleon', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/d36451ed-2c86-4d1c-99e5-58f59d909ac5.jpg', rarity: 'common' as Rarity },
     ];
     
     const generatedItems: InventoryItem[] = [];
     for (let i = 0; i < 50; i++) {
-      const randomRarity = rarities[Math.floor(Math.random() * rarities.length)];
       const randomSkin = skins[Math.floor(Math.random() * skins.length)];
+      const rarityValue = randomSkin.rarity === 'mythic' ? 2000 + Math.floor(Math.random() * 3000) :
+                          randomSkin.rarity === 'legendary' ? 500 + Math.floor(Math.random() * 1500) :
+                          randomSkin.rarity === 'epic' ? 200 + Math.floor(Math.random() * 500) :
+                          randomSkin.rarity === 'rare' ? 100 + Math.floor(Math.random() * 300) :
+                          50 + Math.floor(Math.random() * 150);
+      
       generatedItems.push({
         id: Date.now() + i,
         name: randomSkin.name,
-        rarity: randomRarity,
-        value: Math.floor(Math.random() * 500) + 100,
+        rarity: randomSkin.rarity,
+        value: rarityValue,
         image: randomSkin.image,
       });
     }
     
     const winningIndex = 45;
-    const randomRarity = rarities[Math.floor(Math.random() * rarities.length)];
     const randomSkin = skins[Math.floor(Math.random() * skins.length)];
+    const rarityValue = randomSkin.rarity === 'mythic' ? 2000 + Math.floor(Math.random() * 3000) :
+                        randomSkin.rarity === 'legendary' ? 500 + Math.floor(Math.random() * 1500) :
+                        randomSkin.rarity === 'epic' ? 200 + Math.floor(Math.random() * 500) :
+                        randomSkin.rarity === 'rare' ? 100 + Math.floor(Math.random() * 300) :
+                        50 + Math.floor(Math.random() * 150);
+    
     const winningItem: InventoryItem = {
       id: Date.now() + 999,
       name: randomSkin.name,
-      rarity: randomRarity,
-      value: Math.floor(Math.random() * 500) + 100,
+      rarity: randomSkin.rarity,
+      value: rarityValue,
       image: randomSkin.image,
     };
     generatedItems[winningIndex] = winningItem;
