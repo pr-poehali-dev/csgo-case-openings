@@ -45,12 +45,12 @@ interface LeaderboardPlayer {
 }
 
 const cases: CaseItem[] = [
-  { id: 1, name: 'Стартовый кейс', price: 50, image: '🎁', rarity: 'common' },
-  { id: 2, name: 'Золотой кейс', price: 150, image: '💰', rarity: 'rare' },
-  { id: 3, name: 'Легендарный кейс', price: 300, image: '👑', rarity: 'epic' },
-  { id: 4, name: 'Мифический кейс', price: 500, image: '💎', rarity: 'legendary' },
-  { id: 5, name: 'Королевский кейс', price: 1000, image: '🔥', rarity: 'mythic' },
-  { id: 6, name: 'Неоновый кейс', price: 250, image: '⚡', rarity: 'epic' },
+  { id: 1, name: 'Стартовый кейс', price: 50, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/27affd36-1b2b-4379-a512-58424d9b55d6.jpg', rarity: 'common' },
+  { id: 2, name: 'Золотой кейс', price: 150, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/27affd36-1b2b-4379-a512-58424d9b55d6.jpg', rarity: 'rare' },
+  { id: 3, name: 'Легендарный кейс', price: 300, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/c88317bd-41df-43c7-a339-c99cff9779ee.jpg', rarity: 'epic' },
+  { id: 4, name: 'Мифический кейс', price: 500, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/c88317bd-41df-43c7-a339-c99cff9779ee.jpg', rarity: 'legendary' },
+  { id: 5, name: 'Королевский кейс', price: 1000, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/c88317bd-41df-43c7-a339-c99cff9779ee.jpg', rarity: 'mythic' },
+  { id: 6, name: 'Неоновый кейс', price: 250, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/27affd36-1b2b-4379-a512-58424d9b55d6.jpg', rarity: 'epic' },
 ];
 
 const rarityColors: Record<Rarity, string> = {
@@ -333,7 +333,14 @@ const Index = () => {
                       <Badge variant="outline" className={rarityColors[caseItem.rarity]}>
                         {rarityLabels[caseItem.rarity]}
                       </Badge>
-                      <div className="text-5xl animate-bounce-subtle">{caseItem.image}</div>
+                    </div>
+                    
+                    <div className="flex justify-center my-4">
+                      <img 
+                        src={caseItem.image} 
+                        alt={caseItem.name}
+                        className="w-full h-48 object-contain animate-bounce-subtle"
+                      />
                     </div>
                     
                     <div className="space-y-2">
@@ -643,9 +650,11 @@ const Index = () => {
           <div className="flex flex-col items-center justify-center p-8 space-y-4">
             {!wonItem ? (
               <>
-                <div className="text-7xl animate-spin-slow">
-                  {selectedCase?.image}
-                </div>
+                <img 
+                  src={selectedCase?.image} 
+                  alt="Opening case"
+                  className="w-48 h-48 object-contain animate-spin-slow"
+                />
                 <div className="text-lg font-medium animate-pulse">
                   Вращаем барабан...
                 </div>
