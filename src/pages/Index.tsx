@@ -221,7 +221,21 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      <div className="fixed inset-0 z-0 overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute w-full h-full object-cover opacity-10 blur-sm"
+        >
+          <source src="https://cdn.cloudflare.steamstatic.com/apps/csgo/videos/weapons/awp_dragon_lore.webm" type="video/webm" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/90 to-background"></div>
+      </div>
+      
+      <div className="relative z-10">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-2">
@@ -811,6 +825,7 @@ const Index = () => {
           </div>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 };
