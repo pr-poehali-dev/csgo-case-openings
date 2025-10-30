@@ -96,6 +96,10 @@ const Index = () => {
   const [showWithdrawDialog, setShowWithdrawDialog] = useState(false);
   const [depositAmount, setDepositAmount] = useState('');
   const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+  const [selectedUpgradeItems, setSelectedUpgradeItems] = useState<InventoryItem[]>([]);
+  const [isUpgrading, setIsUpgrading] = useState(false);
+  const [upgradeResult, setUpgradeResult] = useState<{ success: boolean; item?: InventoryItem } | null>(null);
 
   const openCase = (caseItem: CaseItem) => {
     if (balance < caseItem.price) {
@@ -155,6 +159,67 @@ const Index = () => {
     }
   };
 
+  const sellItem = (item: InventoryItem) => {
+    setInventory(inventory.filter(i => i.id !== item.id));
+    setBalance(balance + item.value);
+  };
+
+  const toggleUpgradeItem = (item: InventoryItem) => {
+    if (selectedUpgradeItems.find(i => i.id === item.id)) {
+      setSelectedUpgradeItems(selectedUpgradeItems.filter(i => i.id !== item.id));
+    } else {
+      if (selectedUpgradeItems.length < 5) {
+        setSelectedUpgradeItems([...selectedUpgradeItems, item]);
+      }
+    }
+  };
+
+  const performUpgrade = () => {
+    if (selectedUpgradeItems.length < 2) {
+      alert('Выберите минимум 2 предмета!');
+      return;
+    }
+
+    setIsUpgrading(true);
+
+    setTimeout(() => {
+      const totalValue = selectedUpgradeItems.reduce((sum, item) => sum + item.value, 0);
+      const successChance = Math.min(0.5 + (selectedUpgradeItems.length * 0.1), 0.85);
+      const success = Math.random() < successChance;
+
+      if (success) {
+        const rarities: Rarity[] = ['common', 'rare', 'epic', 'legendary', 'mythic'];
+        const maxRarityIndex = Math.max(...selectedUpgradeItems.map(item => 
+          rarities.indexOf(item.rarity)
+        ));
+        const newRarityIndex = Math.min(maxRarityIndex + 1, rarities.length - 1);
+        const newRarity = rarities[newRarityIndex];
+        
+        const newItem: InventoryItem = {
+          id: Date.now(),
+          name: `Upgraded ${selectedUpgradeItems[0].name}`,
+          rarity: newRarity,
+          value: Math.floor(totalValue * 1.5),
+        };
+
+        const newInventory = inventory.filter(item => 
+          !selectedUpgradeItems.find(selected => selected.id === item.id)
+        );
+        setInventory([newItem, ...newInventory]);
+        setUpgradeResult({ success: true, item: newItem });
+      } else {
+        const newInventory = inventory.filter(item => 
+          !selectedUpgradeItems.find(selected => selected.id === item.id)
+        );
+        setInventory(newInventory);
+        setUpgradeResult({ success: false });
+      }
+
+      setIsUpgrading(false);
+      setSelectedUpgradeItems([]);
+    }, 3000);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -198,6 +263,14 @@ const Index = () => {
               }`}
             >
               Топ игроков
+            </button>
+            <button
+              onClick={() => setActiveTab('upgrade')}
+              className={`font-medium transition-colors hover:text-primary ${
+                activeTab === 'upgrade' ? 'text-primary' : 'text-muted-foreground'
+              }`}
+            >
+              Апгрейд
             </button>
             <button
               onClick={() => setActiveTab('faq')}
@@ -307,6 +380,15 @@ const Index = () => {
                       <Icon name="Coins" size={18} />
                       {item.value}
                     </div>
+                    <Button 
+                      onClick={() => sellItem(item)} 
+                      size="sm" 
+                      variant="outline"
+                      className="w-full mt-2"
+                    >
+                      <Icon name="DollarSign" size={14} className="mr-1" />
+                      Продать
+                    </Button>
                   </div>
                 </Card>
               ))}
@@ -416,6 +498,90 @@ const Index = () => {
                 </div>
               </div>
             </Card>
+          </div>
+        )}
+
+        {activeTab === 'upgrade' && (
+          <div className="space-y-6">
+            <div className="text-center space-y-4">
+              <h2 className="text-3xl font-bold">Система апгрейдов</h2>
+              <p className="text-muted-foreground">
+                Выберите от 2 до 5 предметов для апгрейда. Шанс успеха увеличивается с количеством предметов!
+              </p>
+            </div>
+
+            {selectedUpgradeItems.length > 0 && (
+              <Card className="p-6 bg-card/50 border-primary/20">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xl font-bold">Выбрано предметов: {selectedUpgradeItems.length}/5</h3>
+                    <div className="text-sm text-muted-foreground">
+                      Шанс успеха: {Math.min(50 + (selectedUpgradeItems.length * 10), 85)}%
+                    </div>
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {selectedUpgradeItems.map((item) => (
+                      <Badge key={item.id} className={rarityColors[item.rarity]}>
+                        {item.name} ({item.value})
+                      </Badge>
+                    ))}
+                  </div>
+                  <div className="flex gap-3">
+                    <Button 
+                      onClick={performUpgrade} 
+                      className="flex-1"
+                      disabled={selectedUpgradeItems.length < 2}
+                    >
+                      <Icon name="Zap" size={18} className="mr-2" />
+                      Улучшить
+                    </Button>
+                    <Button 
+                      onClick={() => setSelectedUpgradeItems([])} 
+                      variant="outline"
+                    >
+                      Очистить
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {inventory.map((item) => {
+                const isSelected = selectedUpgradeItems.find(i => i.id === item.id);
+                return (
+                  <Card 
+                    key={item.id} 
+                    className={`border-2 transition-all cursor-pointer ${
+                      isSelected 
+                        ? 'ring-2 ring-primary scale-105' 
+                        : rarityColors[item.rarity]
+                    } hover:scale-105`}
+                    onClick={() => toggleUpgradeItem(item)}
+                  >
+                    <div className="p-4 space-y-3">
+                      <div className="flex justify-between items-start">
+                        <Badge variant="outline" className={rarityColors[item.rarity]}>
+                          {rarityLabels[item.rarity]}
+                        </Badge>
+                        <div className="text-2xl">🔫</div>
+                      </div>
+                      <h3 className="font-bold">{item.name}</h3>
+                      <div className="flex items-center gap-2 text-secondary font-bold">
+                        <Icon name="Coins" size={18} />
+                        {item.value}
+                      </div>
+                      {isSelected && (
+                        <Badge className="w-full justify-center bg-primary">
+                          <Icon name="Check" size={14} className="mr-1" />
+                          Выбрано
+                        </Badge>
+                      )}
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
           </div>
         )}
 
@@ -569,6 +735,70 @@ const Index = () => {
             <Button onClick={handleWithdraw} className="w-full">
               Вывести
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isUpgrading || upgradeResult !== null} onOpenChange={() => {
+        if (!isUpgrading) {
+          setUpgradeResult(null);
+        }
+      }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl text-center">
+              {isUpgrading ? 'Улучшаем предметы...' : upgradeResult?.success ? '🎉 Успех!' : '💔 Неудача'}
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              {isUpgrading ? 'Ожидайте результат' : upgradeResult?.success ? 'Вы получили улучшенный предмет!' : 'Апгрейд не удался, предметы потеряны'}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="flex flex-col items-center justify-center p-8 space-y-4">
+            {isUpgrading ? (
+              <>
+                <div className="text-7xl animate-spin-slow">⚡</div>
+                <div className="text-lg font-medium animate-pulse">
+                  Улучшаем...
+                </div>
+              </>
+            ) : upgradeResult?.success && upgradeResult.item ? (
+              <>
+                <div className="text-6xl animate-bounce-subtle">🔫</div>
+                <div className="text-center space-y-2">
+                  <div className="text-xl font-bold">{upgradeResult.item.name}</div>
+                  <Badge className={`${rarityColors[upgradeResult.item.rarity]} text-lg px-4 py-1`}>
+                    {rarityLabels[upgradeResult.item.rarity]}
+                  </Badge>
+                  <div className="flex items-center justify-center gap-2 text-2xl font-bold text-secondary mt-4">
+                    <Icon name="Coins" size={28} />
+                    {upgradeResult.item.value}
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => setUpgradeResult(null)}
+                  className="w-full mt-4"
+                >
+                  Отлично!
+                </Button>
+              </>
+            ) : (
+              <>
+                <div className="text-6xl">😢</div>
+                <div className="text-center space-y-2">
+                  <div className="text-lg text-muted-foreground">
+                    К сожалению, апгрейд не удался
+                  </div>
+                </div>
+                <Button 
+                  onClick={() => setUpgradeResult(null)}
+                  className="w-full mt-4"
+                  variant="outline"
+                >
+                  Понятно
+                </Button>
+              </>
+            )}
           </div>
         </DialogContent>
       </Dialog>
