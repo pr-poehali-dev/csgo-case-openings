@@ -143,6 +143,8 @@ const Index = () => {
   const [priceFilter, setPriceFilter] = useState<string>('all');
   const [rarityFilter, setRarityFilter] = useState<Rarity | 'all'>('all');
   const [sortBy, setSortBy] = useState<'price-asc' | 'price-desc' | 'name'>('price-asc');
+  const [showItemActionDialog, setShowItemActionDialog] = useState(false);
+  const [itemToDecide, setItemToDecide] = useState<InventoryItem | null>(null);
 
   const openCase = (caseItem: CaseItem) => {
     if (balance < caseItem.price) {
@@ -269,7 +271,7 @@ const Index = () => {
       winSound.play();
       
       setWonItem(winningItem);
-      setInventory([winningItem, ...inventory]);
+      setItemToDecide(winningItem);
       setHistory([
         {
           id: Date.now(),
@@ -996,15 +998,37 @@ const Index = () => {
                     {wonItem.value}
                   </div>
                 </div>
-                <Button 
-                  onClick={() => {
-                    setWonItem(null);
-                    setSelectedCase(null);
-                  }}
-                  className="w-full mt-4"
-                >
-                  Отлично!
-                </Button>
+                <div className="flex gap-3 w-full mt-4">
+                  <Button 
+                    onClick={() => {
+                      if (itemToDecide) {
+                        setBalance(balance + itemToDecide.value);
+                      }
+                      setWonItem(null);
+                      setSelectedCase(null);
+                      setItemToDecide(null);
+                    }}
+                    variant="destructive"
+                    className="flex-1"
+                  >
+                    <Icon name="DollarSign" size={18} className="mr-2" />
+                    Продать за {wonItem.value}
+                  </Button>
+                  <Button 
+                    onClick={() => {
+                      if (itemToDecide) {
+                        setInventory([itemToDecide, ...inventory]);
+                      }
+                      setWonItem(null);
+                      setSelectedCase(null);
+                      setItemToDecide(null);
+                    }}
+                    className="flex-1"
+                  >
+                    <Icon name="Package" size={18} className="mr-2" />
+                    В инвентарь
+                  </Button>
+                </div>
               </>
             )}
           </div>
