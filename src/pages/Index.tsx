@@ -137,6 +137,9 @@ const Index = () => {
   const [selectedUpgradeItems, setSelectedUpgradeItems] = useState<InventoryItem[]>([]);
   const [isUpgrading, setIsUpgrading] = useState(false);
   const [upgradeResult, setUpgradeResult] = useState<{ success: boolean; item?: InventoryItem } | null>(null);
+  const [priceFilter, setPriceFilter] = useState<string>('all');
+  const [rarityFilter, setRarityFilter] = useState<Rarity | 'all'>('all');
+  const [sortBy, setSortBy] = useState<'price-asc' | 'price-desc' | 'name'>('price-asc');
 
   const openCase = (caseItem: CaseItem) => {
     if (balance < caseItem.price) {
@@ -435,8 +438,138 @@ const Index = () => {
               </p>
             </div>
 
+            <Card className="p-6 bg-card/80 backdrop-blur border-primary/20">
+              <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+                <div className="flex flex-wrap gap-3 flex-1">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm text-muted-foreground">Цена</label>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant={priceFilter === 'all' ? 'default' : 'outline'}
+                        onClick={() => setPriceFilter('all')}
+                      >
+                        Все
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={priceFilter === '0-200' ? 'default' : 'outline'}
+                        onClick={() => setPriceFilter('0-200')}
+                      >
+                        До 200₽
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={priceFilter === '200-500' ? 'default' : 'outline'}
+                        onClick={() => setPriceFilter('200-500')}
+                      >
+                        200-500₽
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={priceFilter === '500+' ? 'default' : 'outline'}
+                        onClick={() => setPriceFilter('500+')}
+                      >
+                        500₽+
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm text-muted-foreground">Редкость</label>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant={rarityFilter === 'all' ? 'default' : 'outline'}
+                        onClick={() => setRarityFilter('all')}
+                      >
+                        Все
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={rarityFilter === 'rare' ? 'default' : 'outline'}
+                        onClick={() => setRarityFilter('rare')}
+                        className={rarityFilter === 'rare' ? '' : rarityColors.rare}
+                      >
+                        Редкие
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={rarityFilter === 'epic' ? 'default' : 'outline'}
+                        onClick={() => setRarityFilter('epic')}
+                        className={rarityFilter === 'epic' ? '' : rarityColors.epic}
+                      >
+                        Эпические
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={rarityFilter === 'legendary' ? 'default' : 'outline'}
+                        onClick={() => setRarityFilter('legendary')}
+                        className={rarityFilter === 'legendary' ? '' : rarityColors.legendary}
+                      >
+                        Легендарные
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={rarityFilter === 'mythic' ? 'default' : 'outline'}
+                        onClick={() => setRarityFilter('mythic')}
+                        className={rarityFilter === 'mythic' ? '' : rarityColors.mythic}
+                      >
+                        Мифические
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm text-muted-foreground">Сортировка</label>
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant={sortBy === 'price-asc' ? 'default' : 'outline'}
+                      onClick={() => setSortBy('price-asc')}
+                    >
+                      <Icon name="ArrowUp" size={16} className="mr-1" />
+                      Дешевле
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant={sortBy === 'price-desc' ? 'default' : 'outline'}
+                      onClick={() => setSortBy('price-desc')}
+                    >
+                      <Icon name="ArrowDown" size={16} className="mr-1" />
+                      Дороже
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant={sortBy === 'name' ? 'default' : 'outline'}
+                      onClick={() => setSortBy('name')}
+                    >
+                      <Icon name="ArrowUpAZ" size={16} className="mr-1" />
+                      Имя
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {cases.map((caseItem) => (
+              {cases
+                .filter(caseItem => {
+                  if (priceFilter === 'all') return true;
+                  if (priceFilter === '0-200') return caseItem.price <= 200;
+                  if (priceFilter === '200-500') return caseItem.price > 200 && caseItem.price <= 500;
+                  if (priceFilter === '500+') return caseItem.price > 500;
+                  return true;
+                })
+                .filter(caseItem => rarityFilter === 'all' || caseItem.rarity === rarityFilter)
+                .sort((a, b) => {
+                  if (sortBy === 'price-asc') return a.price - b.price;
+                  if (sortBy === 'price-desc') return b.price - a.price;
+                  if (sortBy === 'name') return a.name.localeCompare(b.name);
+                  return 0;
+                })
+                .map((caseItem) => (
                 <Card
                   key={caseItem.id}
                   className={`group relative overflow-hidden border-2 transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 ${
