@@ -12,7 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-type Rarity = 'common' | 'rare' | 'epic' | 'legendary' | 'mythic';
+type Rarity = 'common' | 'rare' | 'epic' | 'legendary' | 'mythic' | 'alien';
 
 interface CaseItem {
   id: number;
@@ -86,6 +86,7 @@ const cases: CaseItem[] = [
   { id: 38, name: 'Prisma 2 Case', price: 265, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/a26bddf3-9966-47d7-bb24-a9a2aea551da.jpg', rarity: 'epic' },
   { id: 39, name: 'Elite Case', price: 650, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/c88317bd-41df-43c7-a339-c99cff9779ee.jpg', rarity: 'legendary' },
   { id: 40, name: 'Ultimate Case', price: 1500, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/c88317bd-41df-43c7-a339-c99cff9779ee.jpg', rarity: 'mythic' },
+  { id: 41, name: '👽 ALIEN KNIFE BOX', price: 10000, image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/6aa654c4-6229-4757-8ffd-9669e0f85258.jpg', rarity: 'alien' },
 ];
 
 const rarityColors: Record<Rarity, string> = {
@@ -94,6 +95,7 @@ const rarityColors: Record<Rarity, string> = {
   epic: 'text-rarity-epic border-rarity-epic',
   legendary: 'text-rarity-legendary border-rarity-legendary',
   mythic: 'text-rarity-mythic border-rarity-mythic',
+  alien: 'text-purple-400 border-purple-400 shadow-[0_0_20px_rgba(168,85,247,0.6)] animate-pulse',
 };
 
 const rarityLabels: Record<Rarity, string> = {
@@ -102,6 +104,7 @@ const rarityLabels: Record<Rarity, string> = {
   epic: 'Эпический',
   legendary: 'Легендарный',
   mythic: 'Мифический',
+  alien: '👽 ИНОПЛАНЕТНЫЙ',
 };
 
 const Index = () => {
@@ -157,28 +160,53 @@ const Index = () => {
     setBalance(balance - caseItem.price);
 
     const rarities: Rarity[] = ['common', 'rare', 'epic', 'legendary', 'mythic'];
-    const skins = [
-      { name: '★ Karambit | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/d4718631-280d-4f03-8c40-bb62744abc7a.jpg', rarity: 'mythic' as Rarity },
-      { name: '★ Butterfly Knife | Doppler', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/ba1f5ac6-968f-4af9-8e1f-9b2896613848.jpg', rarity: 'mythic' as Rarity },
-      { name: '★ M9 Bayonet | Crimson Web', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/e0d60ad9-b2a2-466b-aa0a-01bb42695b91.jpg', rarity: 'legendary' as Rarity },
-      { name: '★ Sport Gloves | Pandoras Box', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/3760a7f8-d2b1-42be-9321-de282c11b6bf.jpg', rarity: 'mythic' as Rarity },
-      { name: '★ Specialist Gloves | Crimson Kimono', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/134703c5-8fc5-4eca-9287-6dc276fbfc9e.jpg', rarity: 'mythic' as Rarity },
-      { name: '★ Driver Gloves | King Snake', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/12ff4b68-3fb5-4c91-884a-dcd2d9f35907.jpg', rarity: 'legendary' as Rarity },
-      { name: 'AK-47 | Redline', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1817158d-6714-4f64-a134-cd7d32544c61.jpg', rarity: 'legendary' as Rarity },
-      { name: 'AWP | Asiimov', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1d686c74-dadf-4e53-8ce5-0cec8f9ad441.jpg', rarity: 'legendary' as Rarity },
-      { name: 'M4A4 | Howl', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/c3991274-3346-486a-a173-2a3356611dd4.jpg', rarity: 'epic' as Rarity },
-      { name: 'Desert Eagle | Blaze', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/f98bc3ea-e274-4290-93a4-4df9fa84b2cc.jpg', rarity: 'epic' as Rarity },
-      { name: 'Glock-18 | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/6a1a3c7a-7c64-4b6c-b12f-0b5531f6215a.jpg', rarity: 'rare' as Rarity },
-      { name: 'USP-S | Kill Confirmed', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/3a7a2486-34ec-4f61-9da4-911b58ee5ed0.jpg', rarity: 'rare' as Rarity },
-      { name: 'P250 | Asiimov', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/bc57f5b7-9aee-4b11-8f38-a2ab0062906f.jpg', rarity: 'rare' as Rarity },
-      { name: 'MAC-10 | Neon Rider', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/e5354089-2758-4cb2-a372-8dc6cbb78378.jpg', rarity: 'common' as Rarity },
-      { name: 'AUG | Chameleon', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/d36451ed-2c86-4d1c-99e5-58f59d909ac5.jpg', rarity: 'common' as Rarity },
-    ];
+    
+    let skins = [];
+    
+    if (caseItem.id === 41) {
+      skins = [
+        { name: '★ Karambit | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/d4718631-280d-4f03-8c40-bb62744abc7a.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Butterfly Knife | Doppler', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/ba1f5ac6-968f-4af9-8e1f-9b2896613848.jpg', rarity: 'alien' as Rarity },
+        { name: '★ M9 Bayonet | Crimson Web', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/e0d60ad9-b2a2-466b-aa0a-01bb42695b91.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Bayonet | Tiger Tooth', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/d4718631-280d-4f03-8c40-bb62744abc7a.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Huntsman Knife | Slaughter', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/ba1f5ac6-968f-4af9-8e1f-9b2896613848.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Flip Knife | Marble Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/e0d60ad9-b2a2-466b-aa0a-01bb42695b91.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Bowie Knife | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/d4718631-280d-4f03-8c40-bb62744abc7a.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Falchion Knife | Doppler', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/ba1f5ac6-968f-4af9-8e1f-9b2896613848.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Shadow Daggers | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/e0d60ad9-b2a2-466b-aa0a-01bb42695b91.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Gut Knife | Doppler', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/d4718631-280d-4f03-8c40-bb62744abc7a.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Ursus Knife | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/ba1f5ac6-968f-4af9-8e1f-9b2896613848.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Navaja Knife | Slaughter', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/e0d60ad9-b2a2-466b-aa0a-01bb42695b91.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Stiletto Knife | Tiger Tooth', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/d4718631-280d-4f03-8c40-bb62744abc7a.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Talon Knife | Doppler', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/ba1f5ac6-968f-4af9-8e1f-9b2896613848.jpg', rarity: 'alien' as Rarity },
+        { name: '★ Classic Knife | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/e0d60ad9-b2a2-466b-aa0a-01bb42695b91.jpg', rarity: 'alien' as Rarity },
+        { name: 'P250 | Sand Dune', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/bc57f5b7-9aee-4b11-8f38-a2ab0062906f.jpg', rarity: 'common' as Rarity },
+      ];
+    } else {
+      skins = [
+        { name: '★ Karambit | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/d4718631-280d-4f03-8c40-bb62744abc7a.jpg', rarity: 'mythic' as Rarity },
+        { name: '★ Butterfly Knife | Doppler', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/ba1f5ac6-968f-4af9-8e1f-9b2896613848.jpg', rarity: 'mythic' as Rarity },
+        { name: '★ M9 Bayonet | Crimson Web', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/e0d60ad9-b2a2-466b-aa0a-01bb42695b91.jpg', rarity: 'legendary' as Rarity },
+        { name: '★ Sport Gloves | Pandoras Box', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/3760a7f8-d2b1-42be-9321-de282c11b6bf.jpg', rarity: 'mythic' as Rarity },
+        { name: '★ Specialist Gloves | Crimson Kimono', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/134703c5-8fc5-4eca-9287-6dc276fbfc9e.jpg', rarity: 'mythic' as Rarity },
+        { name: '★ Driver Gloves | King Snake', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/12ff4b68-3fb5-4c91-884a-dcd2d9f35907.jpg', rarity: 'legendary' as Rarity },
+        { name: 'AK-47 | Redline', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1817158d-6714-4f64-a134-cd7d32544c61.jpg', rarity: 'legendary' as Rarity },
+        { name: 'AWP | Asiimov', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/1d686c74-dadf-4e53-8ce5-0cec8f9ad441.jpg', rarity: 'legendary' as Rarity },
+        { name: 'M4A4 | Howl', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/c3991274-3346-486a-a173-2a3356611dd4.jpg', rarity: 'epic' as Rarity },
+        { name: 'Desert Eagle | Blaze', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/f98bc3ea-e274-4290-93a4-4df9fa84b2cc.jpg', rarity: 'epic' as Rarity },
+        { name: 'Glock-18 | Fade', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/6a1a3c7a-7c64-4b6c-b12f-0b5531f6215a.jpg', rarity: 'rare' as Rarity },
+        { name: 'USP-S | Kill Confirmed', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/3a7a2486-34ec-4f61-9da4-911b58ee5ed0.jpg', rarity: 'rare' as Rarity },
+        { name: 'P250 | Asiimov', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/bc57f5b7-9aee-4b11-8f38-a2ab0062906f.jpg', rarity: 'rare' as Rarity },
+        { name: 'MAC-10 | Neon Rider', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/e5354089-2758-4cb2-a372-8dc6cbb78378.jpg', rarity: 'common' as Rarity },
+        { name: 'AUG | Chameleon', image: 'https://cdn.poehali.dev/projects/a4cfb459-bfa5-479a-a77f-5804385aa5b2/files/d36451ed-2c86-4d1c-99e5-58f59d909ac5.jpg', rarity: 'common' as Rarity },
+      ];
+    }
     
     const generatedItems: InventoryItem[] = [];
     for (let i = 0; i < 50; i++) {
       const randomSkin = skins[Math.floor(Math.random() * skins.length)];
-      const rarityValue = randomSkin.rarity === 'mythic' ? 2000 + Math.floor(Math.random() * 3000) :
+      const rarityValue = randomSkin.rarity === 'alien' ? 5000 + Math.floor(Math.random() * 15000) :
+                          randomSkin.rarity === 'mythic' ? 2000 + Math.floor(Math.random() * 3000) :
                           randomSkin.rarity === 'legendary' ? 500 + Math.floor(Math.random() * 1500) :
                           randomSkin.rarity === 'epic' ? 200 + Math.floor(Math.random() * 500) :
                           randomSkin.rarity === 'rare' ? 100 + Math.floor(Math.random() * 300) :
@@ -195,7 +223,8 @@ const Index = () => {
     
     const winningIndex = 45;
     const randomSkin = skins[Math.floor(Math.random() * skins.length)];
-    const rarityValue = randomSkin.rarity === 'mythic' ? 2000 + Math.floor(Math.random() * 3000) :
+    const rarityValue = randomSkin.rarity === 'alien' ? 5000 + Math.floor(Math.random() * 15000) :
+                        randomSkin.rarity === 'mythic' ? 2000 + Math.floor(Math.random() * 3000) :
                         randomSkin.rarity === 'legendary' ? 500 + Math.floor(Math.random() * 1500) :
                         randomSkin.rarity === 'epic' ? 200 + Math.floor(Math.random() * 500) :
                         randomSkin.rarity === 'rare' ? 100 + Math.floor(Math.random() * 300) :
