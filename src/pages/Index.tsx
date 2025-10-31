@@ -202,9 +202,28 @@ const Index = () => {
       ];
     }
     
+    const getRandomSkinWithRarity = () => {
+      const isKnifeOrGlove = (name: string) => name.startsWith('★');
+      const ultraRareChance = Math.random();
+      
+      if (caseItem.id === 41) {
+        return skins[Math.floor(Math.random() * skins.length)];
+      }
+      
+      if (ultraRareChance < 0.0000000001) {
+        const knivesAndGloves = skins.filter(skin => isKnifeOrGlove(skin.name));
+        if (knivesAndGloves.length > 0) {
+          return knivesAndGloves[Math.floor(Math.random() * knivesAndGloves.length)];
+        }
+      }
+      
+      const normalSkins = skins.filter(skin => !isKnifeOrGlove(skin.name));
+      return normalSkins[Math.floor(Math.random() * normalSkins.length)];
+    };
+    
     const generatedItems: InventoryItem[] = [];
     for (let i = 0; i < 50; i++) {
-      const randomSkin = skins[Math.floor(Math.random() * skins.length)];
+      const randomSkin = getRandomSkinWithRarity();
       const rarityValue = randomSkin.rarity === 'alien' ? 5000 + Math.floor(Math.random() * 15000) :
                           randomSkin.rarity === 'mythic' ? 2000 + Math.floor(Math.random() * 3000) :
                           randomSkin.rarity === 'legendary' ? 500 + Math.floor(Math.random() * 1500) :
@@ -222,7 +241,7 @@ const Index = () => {
     }
     
     const winningIndex = 45;
-    const randomSkin = skins[Math.floor(Math.random() * skins.length)];
+    const randomSkin = getRandomSkinWithRarity();
     const rarityValue = randomSkin.rarity === 'alien' ? 5000 + Math.floor(Math.random() * 15000) :
                         randomSkin.rarity === 'mythic' ? 2000 + Math.floor(Math.random() * 3000) :
                         randomSkin.rarity === 'legendary' ? 500 + Math.floor(Math.random() * 1500) :
